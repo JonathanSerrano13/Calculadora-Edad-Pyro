@@ -3,11 +3,8 @@ services:
     name: pyro-backend
     env: python
     plan: free
-    buildCommand: ""
-    startCommand: "python app.py"
-    envVars:
-      - key: PORT
-        value: "8000"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python backend/web_bridge.py"
 
-# Nota: Este es un ejemplo mínimo para Render. Ajusta `plan`, `envVars` y otros
-# campos según tu cuenta y requisitos de la aplicación.
+# Render asigna el puerto de ejecución automáticamente mediante la variable
+# de entorno PORT. No la fijes manualmente aquí.
