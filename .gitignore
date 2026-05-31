@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Editor folders
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Pyro runtime artifact (generated at runtime)
+pyro_uri.txt

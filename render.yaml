@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: pyro-backend
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python app.py"
+    envVars:
+      - key: PORT
+        value: "8000"
+
+# Nota: Este es un ejemplo mínimo para Render. Ajusta `plan`, `envVars` y otros
+# campos según tu cuenta y requisitos de la aplicación.
