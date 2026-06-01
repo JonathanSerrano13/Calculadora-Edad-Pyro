@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import json
+import threading
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import Pyro5.api as pyro
+
+from backend.calculator_service import AgeCalculatorService
 from backend.pyro_client import calculate_remote, ensure_service_available
 
 import os
@@ -14,6 +18,42 @@ FRONTEND_DIR = ROOT / "frontend"
 # Allow PORT and HOST to be configured by the environment (useful on Render)
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
+PYRO_HOST = "127.0.0.1"
+PYRO_PORT = 9091
+OBJECT_NAME = "project.pyro.agecalculator"
+URI_FILE = ROOT / "pyro_uri.txt"
+
+
+def start_embedded_pyro_server() -> str:
+    ready = threading.Event()
+    failure: list[BaseException] = []
+    uri_box: list[str] = []
+
+    def run_server() -> None:
+        try:
+            service = AgeCalculatorService()
+            with pyro.Daemon(host=PYRO_HOST, port=PYRO_PORT) as daemon:
+                uri = daemon.register(service, objectId=OBJECT_NAME)
+                URI_FILE.write_text(str(uri), encoding="utf-8")
+                uri_box.append(str(uri))
+                ready.set()
+                daemon.requestLoop()
+        except BaseException as exc:  # pragma: no cover - surfaced on startup
+            failure.append(exc)
+            ready.set()
+
+    threading.Thread(target=run_server, daemon=True).start()
+
+    if not ready.wait(timeout=10):
+        raise RuntimeError("No fue posible iniciar el servidor Pyro embebido.")
+
+    if failure:
+        raise RuntimeError(f"No fue posible iniciar el servidor Pyro embebido: {failure[0]}")
+
+    if not uri_box:
+        raise RuntimeError("El servidor Pyro embebido no devolvió una URI válida.")
+
+    return uri_box[0]
 
 
 class PyroBridgeHandler(SimpleHTTPRequestHandler):
@@ -55,7 +95,7 @@ class PyroBridgeHandler(SimpleHTTPRequestHandler):
 
 
 def main() -> None:
-    uri = ensure_service_available()
+    uri = start_embedded_pyro_server()
     print(f"Servidor Pyro listo en {uri}")
 
     handler = partial(PyroBridgeHandler, directory=str(FRONTEND_DIR))
