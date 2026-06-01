@@ -11,15 +11,18 @@ import Pyro5.api as pyro
 ROOT = Path(__file__).resolve().parent.parent
 URI_FILE = ROOT / "pyro_uri.txt"
 SERVER_SCRIPT = ROOT / "backend" / "pyro_server.py"
+DEFAULT_SERVICE_URI = "PYRO:project.pyro.agecalculator@127.0.0.1:9091"
+SERVER_LOG = ROOT / "pyro_server.log"
 
 
 def _start_server_process() -> None:
-    subprocess.Popen(
-        [sys.executable, str(SERVER_SCRIPT)],
-        cwd=str(ROOT),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
+    with SERVER_LOG.open("a", encoding="utf-8") as log_file:
+        subprocess.Popen(
+            [sys.executable, str(SERVER_SCRIPT)],
+            cwd=str(ROOT),
+            stdout=log_file,
+            stderr=log_file,
+        )
 
 
 def _proxy_is_available() -> bool:
@@ -32,17 +35,14 @@ def _proxy_is_available() -> bool:
 
 
 def load_service_uri() -> str:
-    if not URI_FILE.exists():
-        raise RuntimeError(
-            "No se encontró pyro_uri.txt. Primero ejecuta pyro_server.py para iniciar el objeto remoto."
-        )
-    uri = URI_FILE.read_text(encoding="utf-8").strip()
-    if not uri:
-        raise RuntimeError("pyro_uri.txt está vacío. Vuelve a iniciar pyro_server.py.")
-    return uri
+    if URI_FILE.exists():
+        uri = URI_FILE.read_text(encoding="utf-8").strip()
+        if uri:
+            return uri
+    return DEFAULT_SERVICE_URI
 
 
-def ensure_service_available(timeout_seconds: float = 10.0) -> str:
+def ensure_service_available(timeout_seconds: float = 30.0) -> str:
     if _proxy_is_available():
         return load_service_uri()
 
