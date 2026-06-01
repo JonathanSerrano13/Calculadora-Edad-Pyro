@@ -6,5 +6,3 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python backend/web_bridge.py"
 
-# Render asigna el puerto de ejecución automáticamente mediante la variable
-# de entorno PORT. No la fijes manualmente aquí.
