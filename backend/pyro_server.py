@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import Pyro5.api as pyro
 
-from backend.calculator_service import AgeCalculatorService
-
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from backend.calculator_service import AgeCalculatorService
 URI_FILE = ROOT / "pyro_uri.txt"
 HOST = "127.0.0.1"
 PORT = 9091

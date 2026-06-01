@@ -2,18 +2,22 @@ from __future__ import annotations
 
 import json
 import threading
+import sys
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import Pyro5.api as pyro
 
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from backend.calculator_service import AgeCalculatorService
 from backend.pyro_client import calculate_remote, ensure_service_available
 
 import os
 
-ROOT = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT / "frontend"
 # Allow PORT and HOST to be configured by the environment (useful on Render)
 HOST = os.environ.get("HOST", "0.0.0.0")
