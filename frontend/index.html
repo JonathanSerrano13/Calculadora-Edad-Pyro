@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora de Edad</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-ambient" aria-hidden="true">
+    <span class="stars" aria-hidden="true"></span>
+    <span class="mist mist-1"></span>
+    <span class="mist mist-2"></span>
+  </div>
+
+  <main class="container">
+    <p class="eyebrow">Astrología personal</p>
+    <h1>Calculadora de Edad</h1>
+    <p class="subtitle">Consulta tu edad, tu signo zodiacal y el próximo cumpleaños en una sola vista.</p>
+
+    <label for="dob">Fecha de nacimiento (Dia/Mes/Año)</label>
+    <input id="dob" placeholder="DD/MM/AAAA" />
+
+    <div class="actions">
+      <button id="calc">Calcular</button>
+      <button id="clear">Borrar</button>
+    </div>
+      <div id="signResult" class="sign-result" aria-hidden="true"></div>
+      <div id="result" class="result" aria-live="polite"></div>
+
+      <div id="signs" class="sign-grid" aria-hidden="false">
+        <div class="element-group" data-element="fuego">
+          <div class="element-title">Fuego</div>
+          <div class="group-cards">
+            <div class="sign-card" data-sign="Aries" data-element="fuego"><span class="symbol"></span><span class="name">Aries</span></div>
+            <div class="sign-card" data-sign="Leo" data-element="fuego"><span class="symbol"></span><span class="name">Leo</span></div>
+            <div class="sign-card" data-sign="Sagitario" data-element="fuego"><span class="symbol"></span><span class="name">Sagitario</span></div>
+          </div>
+        </div>
+        <div class="element-group" data-element="tierra">
+          <div class="element-title">Tierra</div>
+          <div class="group-cards">
+            <div class="sign-card" data-sign="Tauro" data-element="tierra"><span class="symbol"></span><span class="name">Tauro</span></div>
+            <div class="sign-card" data-sign="Virgo" data-element="tierra"><span class="symbol"></span><span class="name">Virgo</span></div>
+            <div class="sign-card" data-sign="Capricornio" data-element="tierra"><span class="symbol"></span><span class="name">Capricornio</span></div>
+          </div>
+        </div>
+        <div class="element-group" data-element="aire">
+          <div class="element-title">Aire</div>
+          <div class="group-cards">
+            <div class="sign-card" data-sign="Géminis" data-element="aire"><span class="symbol"></span><span class="name">Géminis</span></div>
+            <div class="sign-card" data-sign="Libra" data-element="aire"><span class="symbol"></span><span class="name">Libra</span></div>
+            <div class="sign-card" data-sign="Acuario" data-element="aire"><span class="symbol"></span><span class="name">Acuario</span></div>
+          </div>
+        </div>
+        <div class="element-group" data-element="agua">
+          <div class="element-title">Agua</div>
+          <div class="group-cards">
+            <div class="sign-card" data-sign="Cáncer" data-element="agua"><span class="symbol"></span><span class="name">Cáncer</span></div>
+            <div class="sign-card" data-sign="Escorpio" data-element="agua"><span class="symbol"></span><span class="name">Escorpio</span></div>
+            <div class="sign-card" data-sign="Piscis" data-element="agua"><span class="symbol"></span><span class="name">Piscis</span></div>
+          </div>
+        </div>
+      </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

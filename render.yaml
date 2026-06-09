@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: pyro-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python backend/web_bridge.py"
+
